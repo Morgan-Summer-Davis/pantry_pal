@@ -1,0 +1,28 @@
+<ul>
+  <li class="recipe-row recipe-row-header">
+    <p>Name</p>
+    <p>Available Ingredients</p>
+    <p>Cost</p>
+    <p>Last Made</p>
+  </li>
+  <% @recipe_pages[@page - 1].each do |recipe| %>
+    <li class="recipe-row <%= recipe_class(recipe) %>">
+      <a href="/recipes/<%= recipe.id %>?ingredients_page=1&directions_page=1">
+        <h3><%= recipe.name %></h3>
+        <p><%= "#{available_ingredients(recipe)} / #{total_ingredients(recipe)}" %></p>
+        <p><%= recipe_cost(recipe) %></p>
+        <p><%= recipe.date_last_made %></p>
+      </a>
+    </li>
+  <% end %>
+</ul>
+
+<%== erb :pagination, locals: { collection: @recipe_pages, page: @page, url: '/recipes?page=' } %>
+
+<% content_for :header_links do %>
+  <a href="/recipes/new">New Recipe</a>
+  <a href="/pantry?in_stock_page=1&out_of_stock_page=1">My Pantry</a>
+  <form action="/logout" method="post">
+    <button type="submit">Logout</button>
+  </form>
+<% end %>

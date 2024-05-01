@@ -1,0 +1,98 @@
+<% params[:recipe_name] ||= @recipe.name %>
+<form action="/recipes/<%= @recipe.id %>" method="post" id="edit-recipe">
+  <h2><input name="recipe_name" type="text" value="<%= params[:recipe_name] %>"></h2>
+
+  <section class='grid'>
+    <section class ='row'>
+      <section class='ingredients'>
+        <ul>
+          <h3>Ingredients</h3>
+          <li>
+            <p>Ingredient</p>
+            <p>Cost</p>
+            <p>Amount</p>
+            <p>Remove</p>
+          </li>
+          <% @ingredients.each do |ingredient|
+            params["#{ingredient.id}_ingredient_amount_in_recipe"] ||=
+              formatted_amount(ingredient.amount_in_recipe) %>
+            <li>
+              <h5><%= ingredient.name %></h5>
+              <p><%= formatted_cost(ingredient.cost) %></p>
+              <p><input name="<%= ingredient.id %>_ingredient_amount_in_recipe" type="text"
+                        value="<%= params["#{ingredient.id}_ingredient_amount_in_recipe"] %>"
+                        placeholder="Amount in Recipe"></p>
+              <input name="<%= ingredient.id %>_ingredient_unpair" type="checkbox">
+            </li>
+          <% end %>
+
+          <h4>Add New Ingredients</h4>
+          <li>
+            <p>Ingredient</p>
+            <p>Cost</p>
+            <p>Amount</p>
+          </li>
+          <% 1.upto(10) do |num| %>
+            <li>
+              <h5><input name="<%= num %>_new_ingredient_name" type="text"
+                         value="<%= params["#{num}_new_ingredient_name"] %>"
+                         placeholder="Name"></h5>
+              <p><input  name="<%= num %>_new_ingredient_cost" type="text"
+                         value="<%= params["#{num}_new_ingredient_cost"] %>"
+                         placeholder="Cost"></p>
+              <p><input  name="<%= num %>_new_ingredient_amount_in_recipe" type="text"
+                         value="<%= params["#{num}_new_ingredient_amount_in_recipe"] %>"
+                         placeholder="Amount in Recipe"></p>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+
+      <section class='directions edit-directions'>
+        <ol>
+          <h3>Directions</h3>
+          <li>
+            <p>Direction</p>
+            <p>Delete</p>
+          </li>
+          <dl>
+            <% @steps.each do |step|
+              params["#{step.id}_step_direction"] ||= step.direction
+              params["#{step.id}_step_notes"]     ||= step.notes %>
+                <dt>
+                  <p><textarea name="<%= step.id %>_step_direction" placeholder="Direction"><%= params["#{step.id}_step_direction"] %></textarea></p>
+                  <input name="<%= step.id %>_step_delete" type="checkbox">
+                </dt>
+                <dd>
+                  <p><textarea name="<%= step.id %>_step_notes" placeholder="Notes"><%= params["#{step.id}_step_notes"] %></textarea></p>
+                </dd>
+            <% end %>
+          </dl>
+
+          <h4>Add New Directions</h4>
+          <li>
+            <p>Direction</p>
+          </li>
+          <dl>
+          <% 1.upto(10) do |num| %>
+            <dt>
+              <p><textarea name="<%= num %>_new_step_direction" placeholder="Direction"><%= params["#{num}_new_step_direction"] %></textarea></p>
+            </dt>
+            <dd>
+              <p><textarea name="<%= num %>_new_step_notes" placeholder="Notes"><%= params["#{num}_new_step_notes"] %></textarea></p>
+            </dd>
+          <% end %>
+          </dl>
+        </ol>
+      </section>
+    </section>
+  </section>
+</form>
+
+<% content_for :header_links do %>
+  <button type="submit" form="edit-recipe">Update</button>
+  <form action="/recipes/<%= @recipe.id %>/delete" method="post">
+    <button type="submit">Delete</button>
+  </form>
+  <button name="cancel" value="true" form="edit-recipe">Cancel</button>
+<% end %>

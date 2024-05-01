@@ -1,0 +1,97 @@
+<h2>My Pantry</h2>
+<form action="/pantry" method="post" id="edit-pantry">
+  <section class="grid">
+    <section class='row'>
+      <section class="ingredients">
+        <ul>
+          <h3>In-Stock Ingredients</h3>
+          <li>
+            <p>Ingredient</p>
+            <p>Cost</p>
+            <p>Amount</p>
+            <p>Delete</p>
+          </li>
+          <% @in_stock.each do |ingredient|
+            params["#{ingredient.id}_ingredient_name"]             ||= ingredient.name
+            params["#{ingredient.id}_ingredient_cost"]             ||= formatted_cost(ingredient.cost)
+            params["#{ingredient.id}_ingredient_amount_in_pantry"] ||= formatted_amount(ingredient.amount_in_pantry) %>
+            <li>
+              <h5><input name="<%= ingredient.id %>_ingredient_name" type="text"
+                         value="<%= params["#{ingredient.id}_ingredient_name"] %>"
+                         placeholder="Name"></h5>
+              <p><input  name="<%= ingredient.id %>_ingredient_cost" type="text"
+                         value="<%= params["#{ingredient.id}_ingredient_cost"] %>"
+                         placeholder="Cost"></p>
+              <p><input  name="<%= ingredient.id %>_ingredient_amount_in_pantry"
+                         type="text" value="<%= params["#{ingredient.id}_ingredient_amount_in_pantry"] %>"
+                         placeholder="Amount in Pantry"></p>
+              <input name="<%= ingredient.id %>_ingredient_delete" type="checkbox">
+            </li>
+          <% end %>
+          </ul>
+        </section>
+
+        <section class="ingredients">
+          <ul>
+            <h3>Out-of-Stock Ingredients</h3>
+            <li>
+              <p>Ingredient</p>
+              <p>Cost</p>
+              <p>Amount</p>
+              <p>Delete</p>
+            </li>
+            <% @out_of_stock.each do |ingredient|
+              params["#{ingredient.id}_ingredient_name"]             ||= ingredient.name
+              params["#{ingredient.id}_ingredient_cost"]             ||= formatted_cost(ingredient.cost)
+              params["#{ingredient.id}_ingredient_amount_in_pantry"] ||= formatted_amount(ingredient.amount_in_pantry) %>
+              <li>
+                <h5><input name="<%= ingredient.id %>_ingredient_name" type="text"
+                           value="<%= params["#{ingredient.id}_ingredient_name"] %>"
+                           placeholder="Name"></h5>
+                <p><input  name="<%= ingredient.id %>_ingredient_cost" type="text"
+                           value="<%= params["#{ingredient.id}_ingredient_cost"] %>"
+                           placeholder="Cost"></p>
+                <p><input  name="<%= ingredient.id %>_ingredient_amount_in_pantry"
+                           type="text" value="<%= params["#{ingredient.id}_ingredient_amount_in_pantry"] %>"
+                           placeholder="Amount in Pantry"></p>
+                <input name="<%= ingredient.id %>_ingredient_delete" type="checkbox">
+              </li>
+            <% end %>
+          </ul>
+        </section>
+      </section>
+    </section>
+
+    <section class="new ingredients">
+      <ul>
+        <h3>Add New Ingredients</h3>
+        <li>
+          <p>Ingredient</p>
+          <p>Cost</p>
+          <p>Amount</p>
+          <p>No. per Purchase</p>
+        </li>
+        <% 1.upto(10) do |num| %>
+          <li>
+            <h5><input name="<%= num %>_new_ingredient_name" type="text"
+                       value="<%= params["#{num}_new_ingredient_name"] %>"
+                       placeholder="Name"></h5>
+            <p><input  name="<%= num %>_new_ingredient_cost" type="text"
+                       value="<%= params["#{num}_new_ingredient_cost"] %>"
+                       placeholder="Cost"></p>
+            <p><input  name="<%= num %>_new_ingredient_amount_in_pantry" type="text"
+                       value="<%= params["#{num}_new_ingredient_amount_in_pantry"] %>"
+                       placeholder="Amount in Pantry"></p>
+            <p><input  name="<%= num %>_new_ingredient_number_per_purchase" type="text"
+                       value="<%= params["#{num}_new_ingredient_number_per_purchase"] %>"
+                       placeholder="Number per Purchase"></p>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+</form>
+
+<% content_for :header_links do %>
+  <button type="submit" form="edit-pantry">Update</button>
+  <button name="cancel" value="true" form="edit-pantry">Cancel</button>
+<% end %>

@@ -1,0 +1,57 @@
+<h2><%= @recipe.name %></h2>
+
+<section class='grid'>
+  <section class='ingredients'>
+    <ul>
+      <h3>Ingredients</h3>
+      <li>
+        <p>Ingredient</p>
+        <p>Cost</p>
+        <p>Amount</p>
+      </li>
+      <% @ingredient_pages[@i_page - 1].each do |ingredient| %>
+        <li class="<%= if @in_stock.include? ingredient
+          'in-stock'
+        end %>">
+          <h5><%= ingredient.name %></h5>
+          <p><%= formatted_amount_adjusted_cost(ingredient.amount_in_recipe, ingredient.cost) %></p>
+          <p><%= formatted_amount(ingredient.amount_in_recipe) %></p>
+        </li>
+      <% end %>
+    </ul>
+
+    <%== erb :pagination, locals: { collection: @ingredient_pages, page: @i_page,
+                                    url: "/recipes/#{@recipe.id}?ingredients_page=",
+                                    url_suffix: "&directions_page=#{@s_page}#ingredients" } %>
+
+  </section>
+
+  <section class="directions">
+    <ol>
+      <h3>Directions</h3>
+      <% @step_pages[@s_page - 1].each do |step| %>
+        <li>
+          <p><%= step.direction %></p>
+          <ul>
+          <% step.notes_array.each do |note| %>
+            <li><%= note %></li>
+          <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ol>
+
+    <%== erb :pagination, locals: { collection: @step_pages, page: @s_page,
+                                    url: "/recipes/#{@recipe.id}?ingredients_page=#{@i_page}&directions_page=",
+                                    url_suffix: '#directions' } %>
+
+  </section>
+</section>
+
+<% content_for :header_links do %>
+  <form action="/recipes/<%= @recipe.id %>/made" method="post">
+    <button type="submit">Mark as Made</button>
+  </form>
+  <a href="/recipes/<%= @recipe.id %>/edit">Edit</a>
+  <a href="/pantry?in_stock_page=1&out_of_stock_page=1">My Pantry</a>
+<% end %>

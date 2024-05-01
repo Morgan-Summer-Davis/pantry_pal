@@ -1,0 +1,51 @@
+<h2>My Pantry</h2>
+<section class="grid">
+  <section class="ingredients">
+    <ul>
+      <h3>In-Stock Ingredients</h3>
+      <li>
+        <p>Ingredient</p>
+        <p>Cost</p>
+        <p>Amount</p>
+      </li>
+      <% @in_stock_pages[@in_stock_page - 1].each do |ingredient| %>
+        <li>
+          <h4><%= ingredient.name %></h4>
+          <p><%= formatted_cost(ingredient.cost) %></p>
+          <p><%= formatted_amount(ingredient.amount_in_pantry) %></p>
+        </li>
+      <% end %>
+
+      <%== erb :pagination, locals: { collection: @in_stock_pages, page: @in_stock_page,
+                               url: "/pantry?in_stock_page=",
+                               url_suffix: "&out_of_stock_page=#{@out_of_stock_page}#in-stock" } %>
+    </ul>
+  </section>
+
+  <section class="ingredients">
+    <ul>
+      <h3>Out-of-Stock Ingredients</h3>
+      <li>
+        <p>Ingredient</p>
+        <p>Cost</p>
+        <p>Amount</p>
+      </li>
+      <% @out_of_stock_pages[@out_of_stock_page - 1].each do |ingredient| %>
+        <li>
+          <h4><%= ingredient.name %></h4>
+          <p><%= formatted_cost(ingredient.cost) %></p>
+          <p><%= formatted_amount(ingredient.amount_in_pantry) %></p>
+        </li>
+      <% end %>
+
+      <%== erb :pagination, locals: { collection: @out_of_stock_pages, page: @out_of_stock_page,
+                               url: "/pantry?in_stock_page=#{@in_stock_page}&out_of_stock_page=",
+                               url_suffix: "#out-of-stock" } %>
+    </ul>
+  </section>
+</section>
+
+<% content_for :header_links do %>
+  <a href="/pantry/edit">Edit Ingredients</a>
+  <a href="/pantry?in_stock_page=1&out_of_stock_page=1">My Pantry</a>
+<% end %>

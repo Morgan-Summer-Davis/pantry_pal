@@ -1,0 +1,13 @@
+<form action="/signup" method="post">
+  <label>Username:</label>
+  <input type="text" name="username" value="<%= params[:username] %>"
+         placeholder="Username" id="username">
+  <label for="password">Password:</label>
+  <input type="password" name="password" placeholder="Password"
+         value="<%= session.delete(:signup_password) %>" id="password">
+  <label for="confirm_password">Confirm Password:</label>
+  <input type="password" name="confirm_password"
+         placeholder="Confirm Password" id="confirm_password">
+  <button type="submit" value="signup">Sign Up</button>
+  <button name="cancel" value="true">Cancel</button>
+</form>

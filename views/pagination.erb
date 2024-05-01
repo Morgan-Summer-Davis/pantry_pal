@@ -1,0 +1,51 @@
+<% if collection.count > 1 %>
+  <%  url_suffix ||= nil %>
+  <div class="pagination-navigation">
+    <% if page > 1 %>
+      <a href="<%= "#{url}1#{url_suffix}" %>">
+    <% end %>
+    <p><<</p>
+    <% if page > 1 %>
+      </a>
+    <% end %>
+
+    <% if page > 1 %>
+      <a href="<%= "#{url}#{page - 1}#{url_suffix}" %>">
+    <% end %>
+    <p><</p>
+    <% if page > 1 %>
+      </a>
+    <% end
+
+    min_page = (page - 2)
+    max_page = (page + 2)
+    min_page = 1                  if min_page < 1
+    max_page =  collection.count if max_page >  collection.count
+
+    (min_page..max_page).each_with_index do |_, index| %>
+      <% unless min_page + index == page %>
+        <a href="<%= "#{url}#{min_page + index}#{url_suffix}" %>">
+      <% end %>
+      <p><%= min_page + index %></p>
+      <% unless min_page + index == page %>
+        </a>
+      <% end %>
+    <% end %>
+
+    <% if page < collection.count %>
+      <a href="<%= "#{url}#{page + 1}#{url_suffix}" %>">
+    <% end %>
+    <p>></p>
+    <% if page < collection.count %>
+      </a>
+    <% end %>
+
+    <% if page < collection.count %>
+      <a href="<%= "#{url}#{collection.count}#{url_suffix}" %>">
+    <% end %>
+    <p>>></p>
+    <% if page < collection.count %>
+      </a>
+    <% end %>
+  </div>
+<% end %>
